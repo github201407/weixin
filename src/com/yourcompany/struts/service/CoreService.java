@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.yourcompany.struts.bean.resp.TextMessage;
+import com.yourcompany.struts.business.TodayInHistoryService;
 import com.yourcompany.struts.utils.MessageUtil;
 
 /**
@@ -91,7 +92,7 @@ public class CoreService {
 					} else if (eventKey.equals("13")) {
 						respContent = "周边搜索菜单项被点击！";
 					} else if (eventKey.equals("14")) {
-						respContent = "历史上的今天菜单项被点击！";
+						respContent = TodayInHistoryService.getTodayInHistoryInfo();
 					} else if (eventKey.equals("21")) {
 						respContent = "歌曲点播菜单项被点击！";
 					} else if (eventKey.equals("22")) {

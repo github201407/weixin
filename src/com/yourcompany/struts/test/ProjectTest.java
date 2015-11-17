@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.yourcompany.struts.business.TodayInHistoryService;
 import com.yourcompany.struts.main.MenuManager;
 
 import junit.framework.TestCase;
 
 public class ProjectTest extends TestCase {
-	public void testProperties(){
+	public void Properties(){
 		Properties properties = new Properties();
 		String fileName = ProjectTest.class.getResource("/").getPath() + "wechat.properties";
 		File file = new File(fileName);
@@ -44,10 +47,22 @@ public class ProjectTest extends TestCase {
 //	     file:/F:/learn/ROOT/WebRoot/WEB-INF/classes/
 	}
 	
-	public void testMain(){
+	public void Main(){
 		MenuManager mManager = new MenuManager();
 		String str = mManager.createMenu();
 		System.out.println(str);
+	}
+	
+	public void testHistoryToday(){
+		String html = TodayInHistoryService.httpRequest("http://tq.360.cn/");
+		Pattern p = Pattern.compile("(.*)(<div class=\"cityinfo\">)(.*?)(</div>)(.*)");
+		Matcher m = p.matcher(html);
+		if (m.matches()) {
+			for(int i = 0; i < m.groupCount(); i++)
+				System.out.println(m.group(i));
+//			for(String str: m.group(3).split("&nbsp;&nbsp;"))
+//				System.out.println(str);
+		}
 	}
 
 }
