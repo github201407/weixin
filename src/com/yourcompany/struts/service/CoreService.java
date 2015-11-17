@@ -1,10 +1,14 @@
 package com.yourcompany.struts.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yourcompany.struts.bean.resp.Article;
+import com.yourcompany.struts.bean.resp.NewsMessage;
 import com.yourcompany.struts.bean.resp.TextMessage;
 import com.yourcompany.struts.business.TodayInHistoryService;
 import com.yourcompany.struts.utils.MessageUtil;
@@ -49,7 +53,13 @@ public class CoreService {
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
 				String content = requestMap.get("Content").trim();
+				 if(content.equals("1")){
+					return reback(fromUserName, toUserName);
+				 }
 				respContent = HandleText.handle(content);
+				textMessage.setContent(respContent);
+				respMessage = MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
@@ -120,5 +130,26 @@ public class CoreService {
 		}
 
 		return respMessage;
+	}
+	
+	public static String reback(String fromUserName, String toUserName){
+		Article article = new Article();
+		article.setTitle("说话就是第一生产力");
+		article.setDescription("倾听就是不打断别人说话吗?怎样说话才是对事不对人?……说话是一门艺术。"
+				+ "教你一套出口成章、掷地有声的说话方法，以理性调控感性，"
+				+ "以效用带动效率，以智商引领情商，快速有效地提升沟通能力。");
+		article.setPicUrl("http://c.hiphotos.baidu.com/ting/pic/item/b58f8c5494eef01f3653aabce2fe9925bc317d07.jpg");
+		article.setUrl("http://play.baidu.com/?__m=mboxCtrl.playAlbum&__a=107362802&__o=/album/107362802||playAlbum&fr=altg_new3||www.baidu.com#");
+		NewsMessage newsMessage = new NewsMessage();
+		List<Article> articles = new ArrayList<Article>();
+		articles.add(article);
+		newsMessage.setArticleCount(articles.size());
+		newsMessage.setArticles(articles);
+		newsMessage.setToUserName(fromUserName);
+		newsMessage.setFromUserName(toUserName);
+		newsMessage.setCreateTime(new Date().getTime());
+		newsMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
+		newsMessage.setFuncFlag(0);
+		return MessageUtil.newsMessageToXml(newsMessage);
 	}
 }

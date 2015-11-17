@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import com.yourcompany.struts.business.TodayInHistoryService;
 import com.yourcompany.struts.main.MenuManager;
+import com.yourcompany.struts.service.CoreService;
 
 import junit.framework.TestCase;
 
@@ -53,7 +54,7 @@ public class ProjectTest extends TestCase {
 		System.out.println(str);
 	}
 	
-	public void testHistoryToday(){
+	public void HistoryToday(){
 		String html = TodayInHistoryService.httpRequest("http://tq.360.cn/");
 		Pattern p = Pattern.compile("(.*)(<div class=\"cityinfo\">)(.*?)(</div>)(.*)");
 		Matcher m = p.matcher(html);
@@ -63,6 +64,11 @@ public class ProjectTest extends TestCase {
 //			for(String str: m.group(3).split("&nbsp;&nbsp;"))
 //				System.out.println(str);
 		}
+	}
+	
+	public void testNewsMessage(){
+		String xml = CoreService.reback("123", "456");
+		System.out.println(xml);
 	}
 
 }
